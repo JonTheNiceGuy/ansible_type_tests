@@ -1,0 +1,35 @@
+---
+- name: Type Check - is_a_list
+  assert:
+    quiet: yes
+    that:
+    - vars[this_key] is not boolean
+    - vars[this_key] is not number
+    - vars[this_key] | int | string != vars[this_key] | string
+    - vars[this_key] | float | string != vars[this_key] | string
+    - vars[this_key] is not string
+    - vars[this_key] is not mapping
+    - vars[this_key] is iterable
+    success_msg: "{{ this_key }} is a list"
+    fail_msg: |-
+      {{ this_key }} should be a list, and is instead
+      {%- if vars[this_key] is not defined %} undefined
+      {%- else %} {{ vars[this_key] is boolean | ternary(
+        'a boolean',
+        (vars[this_key] | int | string == vars[this_key] | string) | ternary(
+          'an integer',
+          (vars[this_key] | float | string == vars[this_key] | string) | ternary(
+            'a float',
+            vars[this_key] is string | ternary(
+              'a string',
+              vars[this_key] is mapping | ternary(
+                'a dict',
+                vars[this_key] is iterable | ternary(
+                  'a list',
+                  'unknown (' ~ vars[this_key] | type_debug ~ ')'
+                )
+              )
+            )
+          )
+        )
+      )}}{% endif %} - {{ vars[this_key] | default('unset') }}

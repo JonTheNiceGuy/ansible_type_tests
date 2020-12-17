@@ -1,0 +1,35 @@
+---
+- hosts: localhost
+  gather_facts: false
+  vars:
+    SomeString: abc123
+    SomeDict: {'somekey': 'somevalue'}
+    SomeList: ['somevalue']
+    SomeInteger: 12
+    SomeFloat: 12.0
+    SomeBoolean: false
+  tasks:
+  - name: Type Check - SomeString
+    vars:
+      this_key: SomeString
+    include_tasks: is_a_string.yml
+  - name: Type Check - SomeDict
+    vars:
+      this_key: SomeDict
+    include_tasks: is_a_dict.yml
+  - name: Type Check - SomeList
+    vars:
+      this_key: SomeList
+    include_tasks: is_a_list.yml
+  - name: Type Check - SomeInteger
+    vars:
+      this_key: SomeInteger
+    include_tasks: is_an_integer.yml
+  - name: Type Check - SomeFloat
+    vars:
+      this_key: SomeFloat
+    include_tasks: is_a_float.yml
+  - name: Type Check - SomeBoolean
+    vars:
+      this_key: SomeBoolean
+    include_tasks: is_a_boolean.yml
